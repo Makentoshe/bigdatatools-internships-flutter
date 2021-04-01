@@ -2,9 +2,8 @@ import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
-import 'CreateIssueWidget.dart';
-import 'model/Issue.dart';
+import 'create_issue_widget.dart';
+import '../model/issue.dart';
 
 class IssuesWidget extends StatefulWidget {
   IssuesWidget({Key key, this.title}) : super(key: key);
