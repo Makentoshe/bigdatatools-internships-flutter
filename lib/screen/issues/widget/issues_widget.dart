@@ -50,12 +50,31 @@ class IssuesWidgetState extends State<IssuesWidget> {
     return Card(
       key: Key(issue.summary),
       margin: const EdgeInsets.all(8.0),
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Text(
-          issue.summary,
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-        ),
+      child: Column(
+        children: [
+          Align(
+            alignment: Alignment.centerLeft,
+            child: Padding(
+              padding: const EdgeInsets.only(left: 16, top: 8, right: 16, bottom: 0),
+              child: Text(
+                issue.summary,
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+              ),
+            ),
+          ),
+          Align(
+            alignment: Alignment.centerLeft,
+            child: Padding(
+              padding: const EdgeInsets.only(left: 16, top: 8, right: 16, bottom: 16),
+              child: Text(
+                issue.description,
+                style: TextStyle(fontSize: 16),
+                maxLines: 3,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+          )
+        ],
       ),
     );
   }
