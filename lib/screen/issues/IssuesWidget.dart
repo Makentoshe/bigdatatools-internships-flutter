@@ -1,5 +1,6 @@
-import 'package:bigdatatools_internships/CreateIssueWidget.dart';
 import 'package:flutter/material.dart';
+
+import 'CreateIssueWidget.dart';
 
 class IssuesWidget extends StatefulWidget {
   IssuesWidget({Key key, this.title}) : super(key: key);
@@ -43,14 +44,19 @@ class IssuesWidgetState extends State<IssuesWidget> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => CreateIssueWidget())
-          );
+          navigateToCreateIssueWidget(context);
         },
         tooltip: 'Increment',
         child: Icon(Icons.add),
       ),
     );
+  }
+
+  navigateToCreateIssueWidget(BuildContext context) async {
+    final result = await Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => CreateIssueWidget())
+    );
+    print(result);
   }
 }

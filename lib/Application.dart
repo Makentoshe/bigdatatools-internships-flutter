@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'IssuesWidget.dart';
+import 'screen/issues/IssuesWidget.dart';
 
 class Application extends StatelessWidget {
   @override
