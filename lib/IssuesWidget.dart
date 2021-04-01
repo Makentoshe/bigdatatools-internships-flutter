@@ -1,3 +1,4 @@
+import 'package:bigdatatools_internships/CreateIssueWidget.dart';
 import 'package:flutter/material.dart';
 
 class IssuesWidget extends StatefulWidget {
@@ -42,7 +43,10 @@ class IssuesWidgetState extends State<IssuesWidget> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => CreateIssueWidget())
+          );
         },
         tooltip: 'Increment',
         child: Icon(Icons.add),
