@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -29,9 +31,10 @@ class IssuesWidgetState extends State<IssuesWidget> {
         title: Text(widget.title),
       ),
       body: Center(
-        child: ListView.builder(
+        child: ReorderableListView.builder(
           itemCount: issues.length,
-          itemBuilder: (context, position) => listViewItem(context, position, issues[position]),
+          itemBuilder: (context, position) => buildItem(context, position, issues[position]),
+          onReorder: (start, current) => reorderItem(start, current),
         ),
       ),
       floatingActionButton: FloatingActionButton(
@@ -44,9 +47,10 @@ class IssuesWidgetState extends State<IssuesWidget> {
     );
   }
 
-  listViewItem(BuildContext context, int position, Issue issue) {
+  buildItem(BuildContext context, int position, Issue issue) {
     return Card(
-      margin: const EdgeInsets.only(left: 8, top: 10, right: 8),
+      key: Key(issue.summary),
+      margin: const EdgeInsets.all(8.0),
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Text(
@@ -61,5 +65,9 @@ class IssuesWidgetState extends State<IssuesWidget> {
     final route = MaterialPageRoute(builder: (context) => CreateIssueWidget());
     final result = await Navigator.push(context, route);
     if (result is Issue) addIssue(result);
+  }
+
+  reorderItem(int start, int current) {
+    issues.insert(min(current, issues.length - 1), issues.removeAt(start));
   }
 }
