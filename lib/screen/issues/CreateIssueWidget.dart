@@ -1,6 +1,7 @@
-import 'package:bigdatatools_internships/screen/issues/Issue.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+
+import 'model/Issue.dart';
 
 class CreateIssueWidget extends StatefulWidget {
   CreateIssueWidget({Key key}) : super(key: key);
@@ -28,7 +29,7 @@ class CreateIssueWidgetState extends State<CreateIssueWidget> {
                 child: TextField(
                   keyboardType: TextInputType.multiline,
                   controller: issueSummaryController,
-                  maxLines: null,
+                  maxLines: 3,
                   decoration: InputDecoration(
                       border: UnderlineInputBorder(),
                       hintText: "Type an issue summary"),

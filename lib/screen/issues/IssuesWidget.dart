@@ -1,6 +1,8 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'CreateIssueWidget.dart';
+import 'model/Issue.dart';
 
 class IssuesWidget extends StatefulWidget {
   IssuesWidget({Key key, this.title}) : super(key: key);
@@ -12,19 +14,13 @@ class IssuesWidget extends StatefulWidget {
 }
 
 class IssuesWidgetState extends State<IssuesWidget> {
+  final List<Issue> issues = <Issue>[];
 
-  // int _counter = 0;
-  //
-  // void _incrementCounter() {
-  //   setState(() {
-  //     // This call to setState tells the Flutter framework that something has
-  //     // changed in this State, which causes it to rerun the build method below
-  //     // so that the display can reflect the updated values. If we changed
-  //     // _counter without calling setState(), then the build method would not be
-  //     // called again, and so nothing would appear to happen.
-  //     _counter++;
-  //   });
-  // }
+  void addIssue(Issue issue) {
+    setState(() {
+      issues.add(issue);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,30 +29,37 @@ class IssuesWidgetState extends State<IssuesWidget> {
         title: Text(widget.title),
       ),
       body: Center(
-        child: ListView.builder(itemBuilder: (context, position) {
-          return Card(
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Text(position.toString(),),
-            ),
-          );
-        }),
+        child: ListView.builder(
+          itemCount: issues.length,
+          itemBuilder: (context, position) => listViewItem(context, position, issues[position]),
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           navigateToCreateIssueWidget(context);
         },
-        tooltip: 'Increment',
+        tooltip: 'Create issue',
         child: Icon(Icons.add),
       ),
     );
   }
 
-  navigateToCreateIssueWidget(BuildContext context) async {
-    final result = await Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => CreateIssueWidget())
+  listViewItem(BuildContext context, int position, Issue issue) {
+    return Card(
+      margin: const EdgeInsets.only(left: 8, top: 10, right: 8),
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Text(
+          issue.summary,
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+        ),
+      ),
     );
-    print(result);
+  }
+
+  navigateToCreateIssueWidget(BuildContext context) async {
+    final route = MaterialPageRoute(builder: (context) => CreateIssueWidget());
+    final result = await Navigator.push(context, route);
+    if (result is Issue) addIssue(result);
   }
 }
