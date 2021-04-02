@@ -1,3 +1,4 @@
+import 'package:bigdatatools_internships/screen/issues/widget/create_issue_tag_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../model/issue.dart';
@@ -30,7 +31,7 @@ class CreateIssueWidgetState extends State<CreateIssueWidget> {
             Container(
               padding: EdgeInsets.only(left: 16.0, top: 16.0, right: 16.0),
               alignment: Alignment.topLeft,
-              child: Text('Summary'),
+              child: Text('Summary (require)'),
             ),
             Container(
                 padding: EdgeInsets.only(left: 16.0, right: 16.0),
@@ -39,6 +40,9 @@ class CreateIssueWidgetState extends State<CreateIssueWidget> {
                   controller: issueSummaryController,
                   maxLines: null,
                   decoration: InputDecoration(border: UnderlineInputBorder(), hintText: "Type an issue summary"),
+                  onChanged: (text) {
+                    setState(() {});
+                  },
                 )),
             Container(
               padding: EdgeInsets.only(left: 16.0, top: 32.0, right: 16.0),
@@ -94,14 +98,15 @@ class CreateIssueWidgetState extends State<CreateIssueWidget> {
                 width: double.infinity,
                 child: ElevatedButton(
                     child: Text('Add issue'),
-                    onPressed: () {
-                      final issue = Issue(
-                          summary: issueSummaryController.text,
-                          description: issueDescriptionController.text,
-                          tags: issueTags
-                      );
-                      Navigator.pop(context, issue);
-                    }),
+                    onPressed: issueSummaryController.text.isEmpty
+                        ? null
+                        : () {
+                            final issue = Issue(
+                                summary: issueSummaryController.text,
+                                description: issueDescriptionController.text,
+                                tags: issueTags);
+                            Navigator.pop(context, issue);
+                          }),
               ),
             )
           ],
@@ -138,43 +143,13 @@ class CreateIssueWidgetState extends State<CreateIssueWidget> {
     });
   }
 
-  Future<void> showTagPickerDialog() async {
-    return showDialog<void>(
+  Future showTagPickerDialog() async {
+    return showDialog<Tag>(
       context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Add a tag'),
-          content: SingleChildScrollView(
-            child: Column(
-              children: <Widget>[
-                TextField(
-                  keyboardType: TextInputType.name,
-                  controller: issueTagsController,
-                  decoration: InputDecoration(border: UnderlineInputBorder(), hintText: "Type a tag"),
-                ),
-              ],
-            ),
-          ),
-          actions: [
-            TextButton(
-              child: Text('Apply'),
-              onPressed: () {
-                addTag(Tag(title: issueTagsController.text));
-                Navigator.pop(context);
-                issueTagsController.clear();
-              },
-            ),
-            TextButton(
-              child: Text('Cancel'),
-              onPressed: () {
-                Navigator.pop(context);
-                issueTagsController.clear();
-              },
-            )
-          ],
-        );
-      },
-    );
+      builder: (BuildContext context) => CreateIssueTagWidget(issueTagsController),
+    ).then((value) {
+      if (value != null) addTag(value);
+    });
   }
 
   @override
