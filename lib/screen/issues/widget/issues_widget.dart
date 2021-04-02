@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'create_issue_widget.dart';
 import '../model/issue.dart';
+import '../model/tag.dart';
 
 class IssuesWidget extends StatefulWidget {
   IssuesWidget({Key key, this.title}) : super(key: key);
@@ -38,7 +39,7 @@ class IssuesWidgetState extends State<IssuesWidget> {
       body: Center(
         child: ReorderableListView.builder(
           itemCount: issues.length,
-          itemBuilder: (context, position) => buildItem(context, issues[position], null),
+          itemBuilder: (context, position) => buildIssueItem(context, issues[position], null),
           onReorder: (start, current) => reorderItem(start, current),
         ),
       ),
@@ -52,10 +53,10 @@ class IssuesWidgetState extends State<IssuesWidget> {
     );
   }
 
-  buildItem(BuildContext context, Issue issue, double elevation) {
+  buildIssueItem(BuildContext context, Issue issue, double elevation) {
     return GestureDetector(
       key: Key(issue.summary),
-      onTap: () => tapItem(issue),
+      onTap: () => showIssueActionsBottomDialog(issue),
       child: buildCardItem(context, issue, elevation),
     );
   }
@@ -73,24 +74,55 @@ class IssuesWidgetState extends State<IssuesWidget> {
               child: Text(
                 issue.summary,
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-              ),
-            ),
-          ),
-          Align(
-            alignment: Alignment.centerLeft,
-            child: Padding(
-              padding: const EdgeInsets.only(left: 16, top: 8, right: 16, bottom: 16),
-              child: Text(
-                issue.description,
-                style: TextStyle(fontSize: 16),
-                maxLines: 3,
+                maxLines: 2,
                 overflow: TextOverflow.ellipsis,
               ),
             ),
-          )
+          ),
+          // Align(
+          //   alignment: Alignment.centerLeft,
+          //   child: Padding(
+          //     padding: const EdgeInsets.only(left: 16, top: 8, right: 16, bottom: 16),
+          //     child: Text(
+          //       issue.description,
+          //       style: TextStyle(fontSize: 16),
+          //       maxLines: 3,
+          //       overflow: TextOverflow.ellipsis,
+          //     ),
+          //   ),
+          // ),
+          Visibility(
+            child: Container(
+              height: 24,
+              margin: const EdgeInsets.only(left: 16.0, top: 8.0, right: 16.0, bottom: 16.0),
+              child: Row(
+                children: [
+                  Icon(Icons.tag, size: 16.0, color: Colors.grey.shade500),
+                  Padding(
+                      padding: const EdgeInsets.only(left: 4.0),
+                      child: Text(
+                        issue.tags.isNotEmpty ? issue.tags.map((e) => e.title).join(", ") : 'No tags',
+                        style: TextStyle(color: Colors.grey.shade500),
+                      ))
+                ],
+              ),
+            ),
+          ),
         ],
       ),
     );
+  }
+
+  buildTagItem(BuildContext context, Tag tag) {
+    return Container(
+      child: RawChip(
+        label: Text(tag.title),
+      ),
+    );
+  }
+
+  buildSeparator(BuildContext context) {
+    return Container(margin: EdgeInsets.only(left: 4.0, right: 4.0));
   }
 
   navigateToCreateIssueWidget(BuildContext context) async {
@@ -103,7 +135,7 @@ class IssuesWidgetState extends State<IssuesWidget> {
     issues.insert(min(current, issues.length - 1), issues.removeAt(start));
   }
 
-  tapItem(Issue issue) {
+  showIssueActionsBottomDialog(Issue issue) {
     showModalBottomSheet(
         context: context,
         builder: (BuildContext context) {
@@ -114,6 +146,9 @@ class IssuesWidgetState extends State<IssuesWidget> {
                 const Divider(
                   color: Colors.purpleAccent,
                   thickness: 1,
+                ),
+                ListTile(
+                  title: Text('Show issue details'),
                 ),
                 ListTile(
                   title: Text('Change issue'),

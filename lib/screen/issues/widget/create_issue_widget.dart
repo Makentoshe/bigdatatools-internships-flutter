@@ -14,6 +14,8 @@ class CreateIssueWidget extends StatefulWidget {
 class CreateIssueWidgetState extends State<CreateIssueWidget> {
   final issueSummaryController = TextEditingController();
   final issueDescriptionController = TextEditingController();
+  final issueTagsController = TextEditingController();
+
   final List<Tag> issueTags = <Tag>[];
   var issueTagsVisibility = false;
 
@@ -78,9 +80,7 @@ class CreateIssueWidgetState extends State<CreateIssueWidget> {
                 height: 32,
                 margin: EdgeInsets.only(left: 16.0, top: 8.0),
                 child: GestureDetector(
-                  onTap: () {
-                    addTag(Tag(title: 'Test'));
-                  },
+                  onTap: () => showTagPickerDialog(),
                   child: RawChip(
                     label: Text('No tags'),
                   ),
@@ -95,8 +95,11 @@ class CreateIssueWidgetState extends State<CreateIssueWidget> {
                 child: ElevatedButton(
                     child: Text('Add issue'),
                     onPressed: () {
-                      final issue =
-                          Issue(summary: issueSummaryController.text, description: issueDescriptionController.text);
+                      final issue = Issue(
+                          summary: issueSummaryController.text,
+                          description: issueDescriptionController.text,
+                          tags: issueTags
+                      );
                       Navigator.pop(context, issue);
                     }),
               ),
@@ -135,10 +138,50 @@ class CreateIssueWidgetState extends State<CreateIssueWidget> {
     });
   }
 
+  Future<void> showTagPickerDialog() async {
+    return showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Add a tag'),
+          content: SingleChildScrollView(
+            child: Column(
+              children: <Widget>[
+                TextField(
+                  keyboardType: TextInputType.name,
+                  controller: issueTagsController,
+                  decoration: InputDecoration(border: UnderlineInputBorder(), hintText: "Type a tag"),
+                ),
+              ],
+            ),
+          ),
+          actions: [
+            TextButton(
+              child: Text('Apply'),
+              onPressed: () {
+                addTag(Tag(title: issueTagsController.text));
+                Navigator.pop(context);
+                issueTagsController.clear();
+              },
+            ),
+            TextButton(
+              child: Text('Cancel'),
+              onPressed: () {
+                Navigator.pop(context);
+                issueTagsController.clear();
+              },
+            )
+          ],
+        );
+      },
+    );
+  }
+
   @override
   void dispose() {
     issueSummaryController.dispose();
     issueDescriptionController.dispose();
+    issueTagsController.dispose();
     super.dispose();
   }
 }

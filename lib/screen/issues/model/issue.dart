@@ -5,11 +5,12 @@ class Issue {
 
   String summary;
   String description;
-  final List<Tag> tags = <Tag>[];
+  List<Tag> tags;
 
-  Issue({String summary, String description}) {
+  Issue({String summary, String description, List<Tag> tags}) {
     this.summary = summary;
     this.description = description;
+    this.tags = tags;
   }
 
 }
