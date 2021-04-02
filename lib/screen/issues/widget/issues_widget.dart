@@ -79,18 +79,6 @@ class IssuesWidgetState extends State<IssuesWidget> {
               ),
             ),
           ),
-          // Align(
-          //   alignment: Alignment.centerLeft,
-          //   child: Padding(
-          //     padding: const EdgeInsets.only(left: 16, top: 8, right: 16, bottom: 16),
-          //     child: Text(
-          //       issue.description,
-          //       style: TextStyle(fontSize: 16),
-          //       maxLines: 3,
-          //       overflow: TextOverflow.ellipsis,
-          //     ),
-          //   ),
-          // ),
           Visibility(
             child: Container(
               height: 24,
@@ -99,11 +87,12 @@ class IssuesWidgetState extends State<IssuesWidget> {
                 children: [
                   Icon(Icons.tag, size: 16.0, color: Colors.grey.shade500),
                   Padding(
-                      padding: const EdgeInsets.only(left: 4.0),
-                      child: Text(
-                        issue.tags.isNotEmpty ? issue.tags.map((e) => e.title).join(", ") : 'No tags',
-                        style: TextStyle(color: Colors.grey.shade500),
-                      ))
+                    padding: const EdgeInsets.only(left: 4.0),
+                    child: Text(
+                      issue.tags.isNotEmpty ? issue.tags.map((e) => e.title).join(", ") : 'No tags',
+                      style: TextStyle(color: Colors.grey.shade500),
+                    ),
+                  )
                 ],
               ),
             ),
@@ -148,10 +137,10 @@ class IssuesWidgetState extends State<IssuesWidget> {
                   thickness: 1,
                 ),
                 ListTile(
-                  title: Text('Show issue details'),
+                  title: Text('Show issue details', style: TextStyle(color: Colors.grey.shade500)),
                 ),
                 ListTile(
-                  title: Text('Change issue'),
+                  title: Text('Change issue', style: TextStyle(color: Colors.grey.shade500)),
                 ),
                 ListTile(
                   title: Text('Delete issue', style: TextStyle(color: Colors.redAccent)),
