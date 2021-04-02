@@ -63,32 +63,19 @@ class CreateIssueWidgetState extends State<CreateIssueWidget> {
               alignment: Alignment.topLeft,
               child: Text('Tags'),
             ),
-            Visibility(
-              visible: issueTagsVisibility,
-              child: Container(
-                height: 32,
-                margin: EdgeInsets.only(top: 8.0),
-                child: ListView.separated(
-                  padding: EdgeInsets.only(left: 16.0, right: 16.0),
-                  scrollDirection: Axis.horizontal,
-                  itemCount: issueTags.length,
-                  itemBuilder: (context, position) => buildItem(context, issueTags[position]),
-                  separatorBuilder: (BuildContext context, int index) => buildSeparator(context),
-                ),
-              ),
-            ),
-            Visibility(
-              visible: !issueTagsVisibility,
-              child: Container(
-                alignment: Alignment.centerLeft,
-                height: 32,
-                margin: EdgeInsets.only(left: 16.0, top: 8.0),
-                child: GestureDetector(
-                  onTap: () => showTagPickerDialog(),
-                  child: RawChip(
-                    label: Text('No tags'),
-                  ),
-                ),
+            Container(
+              height: 32,
+              margin: EdgeInsets.only(top: 8.0),
+              child: ListView.separated(
+                padding: EdgeInsets.only(left: 16.0, right: 16.0),
+                scrollDirection: Axis.horizontal,
+                itemCount: issueTags.length + 1,
+                itemBuilder: (context, position) {
+                  return position == 0
+                      ? buildSupportTagItem(context)
+                      : buildTagItem(context, issueTags[position - 1]);
+                },
+                separatorBuilder: (BuildContext context, int index) => buildSeparator(context),
               ),
             ),
             Align(
@@ -101,12 +88,12 @@ class CreateIssueWidgetState extends State<CreateIssueWidget> {
                     onPressed: issueSummaryController.text.isEmpty
                         ? null
                         : () {
-                            final issue = Issue(
-                                summary: issueSummaryController.text,
-                                description: issueDescriptionController.text,
-                                tags: issueTags);
-                            Navigator.pop(context, issue);
-                          }),
+                      final issue = Issue(
+                          summary: issueSummaryController.text,
+                          description: issueDescriptionController.text,
+                          tags: issueTags);
+                      Navigator.pop(context, issue);
+                    }),
               ),
             )
           ],
@@ -115,11 +102,21 @@ class CreateIssueWidgetState extends State<CreateIssueWidget> {
     );
   }
 
-  buildItem(BuildContext context, Tag tag) {
+  buildSupportTagItem(BuildContext context) {
+    return GestureDetector(
+      onTap: () => showTagPickerDialog(),
+      child: RawChip(
+        label: Text('Add tag'),
+      ),
+    );
+  }
+
+  buildTagItem(BuildContext context, Tag tag) {
     return Container(
       child: RawChip(
-        label: Text(tag.title),
-        deleteIcon: Icon(Icons.close, size: 24.0),
+        backgroundColor: Colors.purple,
+        label: Text(tag.title, style: TextStyle(color: Colors.white),),
+        deleteIcon: Icon(Icons.close, size: 24.0, color: Colors.white),
         onDeleted: () => removeTag(tag),
       ),
     );
