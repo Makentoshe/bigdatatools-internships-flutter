@@ -29,6 +29,10 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
 
+  # A HSV(HSB)/HSL color picker inspired by chrome devtools
+  # and a material color picker for your flutter app.
+  flutter_colorpicker: ^0.4.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

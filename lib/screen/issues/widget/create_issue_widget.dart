@@ -71,9 +71,7 @@ class CreateIssueWidgetState extends State<CreateIssueWidget> {
                 scrollDirection: Axis.horizontal,
                 itemCount: issueTags.length + 1,
                 itemBuilder: (context, position) {
-                  return position == 0
-                      ? buildSupportTagItem(context)
-                      : buildTagItem(context, issueTags[position - 1]);
+                  return position == 0 ? buildSupportTagItem(context) : buildTagItem(context, issueTags[position - 1]);
                 },
                 separatorBuilder: (BuildContext context, int index) => buildSeparator(context),
               ),
@@ -88,12 +86,12 @@ class CreateIssueWidgetState extends State<CreateIssueWidget> {
                     onPressed: issueSummaryController.text.isEmpty
                         ? null
                         : () {
-                      final issue = Issue(
-                          summary: issueSummaryController.text,
-                          description: issueDescriptionController.text,
-                          tags: issueTags);
-                      Navigator.pop(context, issue);
-                    }),
+                            final issue = Issue(
+                                summary: issueSummaryController.text,
+                                description: issueDescriptionController.text,
+                                tags: issueTags);
+                            Navigator.pop(context, issue);
+                          }),
               ),
             )
           ],
@@ -114,9 +112,12 @@ class CreateIssueWidgetState extends State<CreateIssueWidget> {
   buildTagItem(BuildContext context, Tag tag) {
     return Container(
       child: RawChip(
-        backgroundColor: Colors.purple,
-        label: Text(tag.title, style: TextStyle(color: Colors.white),),
-        deleteIcon: Icon(Icons.close, size: 24.0, color: Colors.white),
+        backgroundColor: tag.color,
+        label: Text(
+          tag.title,
+          style: TextStyle(color: tag.color == null ? Colors.black : Colors.white),
+        ),
+        deleteIcon: Icon(Icons.close, size: 24.0, color: tag.color == null ? Colors.black : Colors.white),
         onDeleted: () => removeTag(tag),
       ),
     );
