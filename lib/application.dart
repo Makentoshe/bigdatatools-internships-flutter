@@ -10,7 +10,7 @@ class Application extends StatelessWidget {
         // TODO add material color
         primarySwatch: Colors.purple,
       ),
-      home: IssuesWidget(title: 'Flutter Demo Page'),
+      home: IssuesWidget(title: 'Flutter To-Do list'),
     );
   }
 }
