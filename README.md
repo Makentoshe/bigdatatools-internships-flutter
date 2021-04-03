@@ -1,16 +1,26 @@
 # bigdatatools_internships
 
-A new Flutter project.
+This is a test project with To-Do list functionality. 
+It uses Flutter/Dart technologies.
+
+Basic functional:
+ - Adding an issue to the list;
+ - Moving issues via drag-and-drop gesture;
+ - Removing issue from the list;
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
+### Requirements
 
-A few resources to get you started if this is your first Flutter project:
+ - Dart 2.12.2 or higher.
+ - Flutter 2.0.3 or higher.
+ 
+### Build and run application
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+#### Android 
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+ - connect your android device or emulator via adb.
+ 
+ - use `flutter run` command to start android apk building.
+ 
+ - or use `flutter install` to install the apk on a connected device.
