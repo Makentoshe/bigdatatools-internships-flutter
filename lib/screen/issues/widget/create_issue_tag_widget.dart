@@ -55,7 +55,7 @@ class CreateIssueTagWidgetState extends State<CreateIssueTagWidget> {
             Container(
               height: 128,
               child: BlockPicker(
-                pickerColor: Colors.white,
+                pickerColor: Colors.grey.shade500,
                 availableColors: availableColors,
                 onColorChanged: changeColor,
               ),

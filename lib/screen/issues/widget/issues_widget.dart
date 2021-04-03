@@ -2,9 +2,10 @@ import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'create_issue_widget.dart';
+
 import '../model/issue.dart';
 import '../model/tag.dart';
+import 'create_issue_widget.dart';
 
 class IssuesWidget extends StatefulWidget {
   IssuesWidget({Key key, this.title}) : super(key: key);
@@ -88,11 +89,10 @@ class IssuesWidgetState extends State<IssuesWidget> {
                   Icon(Icons.tag, size: 16.0, color: Colors.grey.shade500),
                   Padding(
                     padding: const EdgeInsets.only(left: 4.0),
-                    child: Text(
-                      issue.tags.isNotEmpty ? issue.tags.map((e) => e.title).join(", ") : 'No tags',
-                      style: TextStyle(color: Colors.grey.shade500),
+                    child: RichText(
+                      text: TextSpan(style: TextStyle(color: Colors.grey.shade500), children: buildTagsWord(issue.tags)),
                     ),
-                  )
+                  ),
                 ],
               ),
             ),
@@ -102,16 +102,20 @@ class IssuesWidgetState extends State<IssuesWidget> {
     );
   }
 
-  buildTagItem(BuildContext context, Tag tag) {
-    return Container(
-      child: RawChip(
-        label: Text(tag.title),
-      ),
-    );
+  TextSpan buildTagWord(Tag tag) {
+    return TextSpan(text: tag.title, style: TextStyle(color: tag.color));
   }
 
-  buildSeparator(BuildContext context) {
-    return Container(margin: EdgeInsets.only(left: 4.0, right: 4.0));
+  List<TextSpan> buildTagsWord(List<Tag> tags) {
+    if (tags.isEmpty) {
+      return [buildTagWord(Tag(title: 'No tags'))];
+    } else {
+      return tags
+          .map((tag) => buildTagWord(tag))
+          .expand((span) => [span, TextSpan(text: ', ')])
+          .toList()
+          .sublist(0, tags.length * 2 - 1);
+    }
   }
 
   navigateToCreateIssueWidget(BuildContext context) async {
