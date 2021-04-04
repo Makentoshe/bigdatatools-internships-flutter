@@ -2,17 +2,17 @@ import 'package:bigdatatools_internships/screen/issues/model/tag.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 
-class CreateIssueTagWidget extends StatefulWidget {
+class IssueCreateTagDialogWidget extends StatefulWidget {
   final TextEditingController issueTagsController;
 
-  CreateIssueTagWidget(this.issueTagsController, {Key key}) : super(key: key);
+  IssueCreateTagDialogWidget(this.issueTagsController, {Key key}) : super(key: key);
 
   @override
-  State<StatefulWidget> createState() => CreateIssueTagWidgetState(issueTagsController);
+  State<StatefulWidget> createState() => IssueCreateTagDialogWidgetState(issueTagsController);
 }
 
-class CreateIssueTagWidgetState extends State<CreateIssueTagWidget> {
-  CreateIssueTagWidgetState(this.issueTagsController) : super();
+class IssueCreateTagDialogWidgetState extends State<IssueCreateTagDialogWidget> {
+  IssueCreateTagDialogWidgetState(this.issueTagsController) : super();
 
   final TextEditingController issueTagsController;
 

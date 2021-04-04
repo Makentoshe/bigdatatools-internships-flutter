@@ -1,4 +1,4 @@
-import 'package:bigdatatools_internships/screen/issues/widget/create_issue_tag_widget.dart';
+import 'package:bigdatatools_internships/screen/issues/widget/issue_create_tag_dialog_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../model/issue.dart';
@@ -144,7 +144,7 @@ class CreateIssueWidgetState extends State<CreateIssueWidget> {
   Future showTagPickerDialog() async {
     return showDialog<Tag>(
       context: context,
-      builder: (BuildContext context) => CreateIssueTagWidget(issueTagsController),
+      builder: (BuildContext context) => IssueCreateTagDialogWidget(issueTagsController),
     ).then((value) {
       if (value != null) addTag(value);
     });
