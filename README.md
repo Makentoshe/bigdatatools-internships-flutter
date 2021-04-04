@@ -8,6 +8,32 @@ Basic functional:
  - Moving issues via drag-and-drop gesture;
  - Removing issue from the list;
 
+<br>
+<table>
+ <tr>
+  <td>
+   <img src=./screenshots/screenshot-issues.png width=200 />
+  </td>
+  <td>
+   <img src=./screenshots/screenshot-issue-actions.png width=200 />
+  </td>
+  <td>
+   <img src=./screenshots/screenshot-create-issue-empty.png width=200 />
+  </td>
+ </tr>
+ <tr>
+  <td>
+   <img src=./screenshots/screenshot-create-issue.png width=200/>
+  </td>
+  <td>
+   <img src=./screenshots/screenshot-create-issue-empty.png width=200/>
+  </td>
+  <td>
+   <img src=./screenshots/screenshot-create-issue-tag.png width=200/>
+  </td>
+ </tr>
+</table>
+
 ## Getting Started
 
 ### Requirements
