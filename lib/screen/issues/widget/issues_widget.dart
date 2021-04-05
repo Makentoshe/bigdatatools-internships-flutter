@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:bigdatatools_internships/screen/issues/model/issue_action.dart';
+import 'package:bigdatatools_internships/screen/issues/viewmodel/issues_view_model.dart';
 import 'package:bigdatatools_internships/screen/issues/widget/issue_item_action_dialog_widget.dart';
 import 'package:bigdatatools_internships/screen/issues/widget/issue_item_widget.dart';
 import 'package:flutter/cupertino.dart';
@@ -11,28 +12,23 @@ import '../model/tag.dart';
 import 'issue_create_widget.dart';
 
 class IssuesWidget extends StatefulWidget {
-  IssuesWidget({Key key, this.title}) : super(key: key);
+  IssuesWidget({Key key, this.title, this.viewModel}) : super(key: key);
 
   final String title;
+  final IssuesViewModel viewModel;
 
   @override
-  IssuesWidgetState createState() => IssuesWidgetState();
+  IssuesWidgetState createState() => IssuesWidgetState(viewModel);
 }
 
 class IssuesWidgetState extends State<IssuesWidget> {
-  final List<Issue> issues = <Issue>[];
-
-  void addIssue(Issue issue) {
-    setState(() {
-      issues.add(issue);
+  IssuesWidgetState(this.viewModel) : super() {
+    viewModel.addListener(() {
+      setState((){});
     });
   }
 
-  void removeIssue(Issue issue) {
-    setState(() {
-      issues.remove(issue);
-    });
-  }
+  final IssuesViewModel viewModel;
 
   @override
   Widget build(BuildContext context) {
@@ -42,9 +38,9 @@ class IssuesWidgetState extends State<IssuesWidget> {
       ),
       body: Center(
         child: ReorderableListView.builder(
-          itemCount: issues.length,
-          itemBuilder: (context, position) => buildIssueItem(context, issues[position], null),
-          onReorder: (start, current) => reorderItem(start, current),
+          itemCount: viewModel.issues.length,
+          itemBuilder: (context, position) => buildIssueItem(context, viewModel.issues[position], null),
+          onReorder: (start, current) => viewModel.reorderIssues(start, current),
         ),
       ),
       floatingActionButton: FloatingActionButton(
@@ -68,11 +64,7 @@ class IssuesWidgetState extends State<IssuesWidget> {
   navigateToCreateIssueWidget(BuildContext context) async {
     final route = MaterialPageRoute(builder: (context) => CreateIssueWidget());
     final result = await Navigator.push(context, route);
-    if (result is Issue) addIssue(result);
-  }
-
-  reorderItem(int start, int current) {
-    issues.insert(min(current, issues.length - 1), issues.removeAt(start));
+    if (result is Issue) viewModel.addIssue(result);
   }
 
   showIssueActionsBottomDialog(Issue issue) {
@@ -99,6 +91,12 @@ class IssuesWidgetState extends State<IssuesWidget> {
   }
 
   issueActionDelete(DeleteIssueAction action) {
-    removeIssue(action.issue);
+    viewModel.removeIssue(action.issue);
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    viewModel.dispose();
   }
 }

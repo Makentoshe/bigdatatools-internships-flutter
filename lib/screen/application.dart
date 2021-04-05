@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
-import 'screen/issues/widget/issues_widget.dart';
+import 'issues/viewmodel/issues_view_model.dart';
+import 'issues/widget/issues_widget.dart';
 
 class Application extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'JetBrains DBT Inspector',
+      title: 'JetBrains BDT Inspector',
       theme: ThemeData(
-        // TODO add material color
         primarySwatch: Colors.purple,
       ),
-      home: IssuesWidget(title: 'Flutter To-Do list'),
+      home: IssuesWidget(title: 'Flutter To-Do list', viewModel: IssuesViewModel(),),
     );
   }
 }
