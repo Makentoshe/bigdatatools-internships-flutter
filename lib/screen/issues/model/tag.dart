@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
 
 class Tag {
+  Tag(this.title, {this.color});
 
-  String title;
-  Color color;
+  final String title;
+  final Color? color;
 
-  Tag({String title, Color color}) {
-    this.title = title;
-    this.color = color;
-  }
 }

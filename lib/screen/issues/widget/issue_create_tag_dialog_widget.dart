@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 
 class IssueCreateTagDialogWidget extends StatefulWidget {
-  final TextEditingController issueTagsController;
+  IssueCreateTagDialogWidget(this.issueTagsController, {Key? key}) : super(key: key);
 
-  IssueCreateTagDialogWidget(this.issueTagsController, {Key key}) : super(key: key);
+  final TextEditingController issueTagsController;
 
   @override
   State<StatefulWidget> createState() => IssueCreateTagDialogWidgetState(issueTagsController);
@@ -16,7 +16,7 @@ class IssueCreateTagDialogWidgetState extends State<IssueCreateTagDialogWidget> 
 
   final TextEditingController issueTagsController;
 
-  Color selectedColor;
+  Color? selectedColor;
   final List<Color> availableColors = <Color>[
     Colors.red,
     Colors.green,
@@ -69,7 +69,7 @@ class IssueCreateTagDialogWidgetState extends State<IssueCreateTagDialogWidget> 
           onPressed: issueTagsController.text.isEmpty
               ? null
               : () {
-                  Navigator.pop(context, Tag(title: issueTagsController.text, color: selectedColor));
+                  Navigator.pop(context, Tag(issueTagsController.text, color: selectedColor));
                   issueTagsController.clear();
                 },
         ),

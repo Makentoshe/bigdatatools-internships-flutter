@@ -2,15 +2,10 @@
 import 'tag.dart';
 
 class Issue {
+  Issue(this.summary, this.description, this.tags) ;
 
-  String summary;
-  String description;
-  List<Tag> tags;
-
-  Issue({String summary, String description, List<Tag> tags}) {
-    this.summary = summary;
-    this.description = description;
-    this.tags = tags;
-  }
+  final String summary;
+  final String description;
+  final List<Tag> tags;
 
 }

@@ -5,7 +5,7 @@ import '../model/issue.dart';
 import '../model/tag.dart';
 
 class CreateIssueWidget extends StatefulWidget {
-  CreateIssueWidget({Key key}) : super(key: key);
+  CreateIssueWidget({Key? key}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => CreateIssueWidgetState();
@@ -40,9 +40,7 @@ class CreateIssueWidgetState extends State<CreateIssueWidget> {
                   controller: issueSummaryController,
                   maxLines: null,
                   decoration: InputDecoration(border: UnderlineInputBorder(), hintText: "Type an issue summary"),
-                  onChanged: (text) {
-                    setState(() {});
-                  },
+                  onChanged: (text) => setState(() {}),
                 )),
             Container(
               padding: EdgeInsets.only(left: 16.0, top: 32.0, right: 16.0),
@@ -86,10 +84,8 @@ class CreateIssueWidgetState extends State<CreateIssueWidget> {
                     onPressed: issueSummaryController.text.isEmpty
                         ? null
                         : () {
-                            final issue = Issue(
-                                summary: issueSummaryController.text,
-                                description: issueDescriptionController.text,
-                                tags: issueTags);
+                            final issue =
+                                Issue(issueSummaryController.text, issueDescriptionController.text, issueTags);
                             Navigator.pop(context, issue);
                           }),
               ),

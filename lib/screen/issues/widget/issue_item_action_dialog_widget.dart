@@ -38,7 +38,7 @@ class IssueItemActionDialogWidget extends StatelessWidget {
     );
   }
 
-  Future<void> showItemDeleteDialog(BuildContext context, Issue issue) async {
+  Future<dynamic> showItemDeleteDialog(BuildContext context, Issue issue) async {
     return showDialog(context: context, builder: (BuildContext context) => IssueItemActionDeleteDialogWidget(issue));
   }
 }

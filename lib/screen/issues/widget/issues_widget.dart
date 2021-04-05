@@ -12,7 +12,7 @@ import '../model/tag.dart';
 import 'issue_create_widget.dart';
 
 class IssuesWidget extends StatefulWidget {
-  IssuesWidget({Key key, this.title, this.viewModel}) : super(key: key);
+  IssuesWidget(this.title, this.viewModel, {Key? key}) : super(key: key);
 
   final String title;
   final IssuesViewModel viewModel;
@@ -24,7 +24,7 @@ class IssuesWidget extends StatefulWidget {
 class IssuesWidgetState extends State<IssuesWidget> {
   IssuesWidgetState(this.viewModel) : super() {
     viewModel.addListener(() {
-      setState((){});
+      setState(() {});
     });
   }
 
@@ -39,7 +39,7 @@ class IssuesWidgetState extends State<IssuesWidget> {
       body: Center(
         child: ReorderableListView.builder(
           itemCount: viewModel.issues.length,
-          itemBuilder: (context, position) => buildIssueItem(context, viewModel.issues[position], null),
+          itemBuilder: (context, position) => buildIssueItem(context, viewModel.issues[position], 1.0),
           onReorder: (start, current) => viewModel.reorderIssues(start, current),
         ),
       ),
@@ -76,7 +76,7 @@ class IssuesWidgetState extends State<IssuesWidget> {
     switch (action.runtimeType) {
       case DeleteIssueAction:
         {
-          issueActionDelete(action);
+          issueActionDelete(action as DeleteIssueAction);
           break;
         }
       case ChangeIssueAction:
