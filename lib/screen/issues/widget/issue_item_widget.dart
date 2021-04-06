@@ -56,7 +56,7 @@ class IssueItemWidget extends StatelessWidget {
 
   List<TextSpan> buildTagsWord(List<Tag> tags) {
     if (tags.isEmpty) {
-      return [buildTagWord(Tag('No tags'))];
+      return [buildTagWord(Tag(-1, 'No tags'))];
     } else {
       return tags
           .map((tag) => buildTagWord(tag))
