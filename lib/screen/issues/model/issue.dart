@@ -30,7 +30,7 @@ class IssueFactory {
 
   final String summary;
   final String description;
-  final List<Tag> tags;
+  final List<TagFactory> tags;
 
   OrderedIssueFactory order(int order) {
     return OrderedIssueFactory(summary, description, tags, order);
@@ -42,10 +42,10 @@ class OrderedIssueFactory {
 
   final String summary;
   final String description;
-  final List<Tag> tags;
+  final List<TagFactory> tags;
   final int order;
 
   Issue build(int id) {
-    return Issue(summary, description, tags, id, order);
+    return Issue(summary, description, tags.map((factory) => factory.build(-1)).toList(), id, order);
   }
 }

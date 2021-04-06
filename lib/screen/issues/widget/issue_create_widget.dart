@@ -17,7 +17,7 @@ class CreateIssueWidgetState extends State<CreateIssueWidget> {
   final issueDescriptionController = TextEditingController();
   final issueTagsController = TextEditingController();
 
-  final List<Tag> issueTags = <Tag>[];
+  final List<TagFactory> issueTags = <TagFactory>[];
   var issueTagsVisibility = false;
 
   @override
@@ -105,7 +105,7 @@ class CreateIssueWidgetState extends State<CreateIssueWidget> {
     );
   }
 
-  buildTagItem(BuildContext context, Tag tag) {
+  buildTagItem(BuildContext context, TagFactory tag) {
     return Container(
       child: RawChip(
         backgroundColor: tag.color,
@@ -123,14 +123,14 @@ class CreateIssueWidgetState extends State<CreateIssueWidget> {
     return Container(margin: EdgeInsets.only(left: 4.0, right: 4.0));
   }
 
-  removeTag(Tag tag) {
+  removeTag(TagFactory tag) {
     setState(() {
       issueTags.remove(tag);
       issueTagsVisibility = issueTags.isNotEmpty;
     });
   }
 
-  addTag(Tag tag) {
+  addTag(TagFactory tag) {
     setState(() {
       issueTags.add(tag);
       issueTagsVisibility = issueTags.isNotEmpty;
@@ -138,7 +138,7 @@ class CreateIssueWidgetState extends State<CreateIssueWidget> {
   }
 
   Future showTagPickerDialog() async {
-    return showDialog<Tag>(
+    return showDialog<TagFactory>(
       context: context,
       builder: (BuildContext context) => IssueCreateTagDialogWidget(issueTagsController),
     ).then((value) {

@@ -1,4 +1,5 @@
 import 'package:bigdatatools_internships/screen/issues/model/issue.dart';
+import 'package:bigdatatools_internships/screen/issues/model/tag.dart';
 import 'package:floor/floor.dart';
 
 @entity
@@ -23,8 +24,8 @@ class IssueRecord {
   final String summary;
   final String description;
 
-  Issue toIssue() {
-    return Issue(summary, description, [], id!, order);
+  Issue toIssue(List<Tag> tags) {
+    return Issue(summary, description, tags, id!, order);
   }
 
   @override

@@ -69,7 +69,7 @@ class IssueCreateTagDialogWidgetState extends State<IssueCreateTagDialogWidget> 
           onPressed: issueTagsController.text.isEmpty
               ? null
               : () {
-                  Navigator.pop(context, Tag(-1, issueTagsController.text, color: selectedColor));
+                  Navigator.pop(context, TagFactory(issueTagsController.text, color: selectedColor));
                   issueTagsController.clear();
                 },
         ),

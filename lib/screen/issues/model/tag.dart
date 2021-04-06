@@ -7,6 +7,10 @@ class Tag {
   final String title;
   final Color? color;
 
+  @override
+  String toString() {
+    return 'Tag(id:$id, title:$title, color:$color)';
+  }
 }
 
 class TagFactory {
@@ -17,5 +21,10 @@ class TagFactory {
 
   Tag build(int id) {
     return Tag(id, title, color: color);
+  }
+
+  @override
+  String toString() {
+    return 'TagFactory(title:$title, color:$color)';
   }
 }

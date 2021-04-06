@@ -62,6 +62,8 @@ class _$FlutterDatabase extends FlutterDatabase {
 
   IssuesDao? _issuesDaoInstance;
 
+  TagsDao? _tagsDaoInstance;
+
   Future<sqflite.Database> open(String path, List<Migration> migrations,
       [Callback? callback]) async {
     final databaseOptions = sqflite.OpenDatabaseOptions(
@@ -81,6 +83,8 @@ class _$FlutterDatabase extends FlutterDatabase {
       onCreate: (database, version) async {
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `IssueRecord` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `order` INTEGER NOT NULL, `summary` TEXT NOT NULL, `description` TEXT NOT NULL)');
+        await database.execute(
+            'CREATE TABLE IF NOT EXISTS `TagRecord` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `issueId` INTEGER NOT NULL, `title` TEXT NOT NULL, `color` INTEGER)');
 
         await callback?.onCreate?.call(database, version);
       },
@@ -91,6 +95,11 @@ class _$FlutterDatabase extends FlutterDatabase {
   @override
   IssuesDao get issuesDao {
     return _issuesDaoInstance ??= _$IssuesDao(database, changeListener);
+  }
+
+  @override
+  TagsDao get tagsDao {
+    return _tagsDaoInstance ??= _$TagsDao(database, changeListener);
   }
 }
 
@@ -152,5 +161,84 @@ class _$IssuesDao extends IssuesDao {
   @override
   Future<void> update(IssueRecord record) async {
     await _issueRecordUpdateAdapter.update(record, OnConflictStrategy.abort);
+  }
+}
+
+class _$TagsDao extends TagsDao {
+  _$TagsDao(this.database, this.changeListener)
+      : _queryAdapter = QueryAdapter(database),
+        _tagRecordInsertionAdapter = InsertionAdapter(
+            database,
+            'TagRecord',
+            (TagRecord item) => <String, Object?>{
+                  'id': item.id,
+                  'issueId': item.issueId,
+                  'title': item.title,
+                  'color': item.color
+                }),
+        _tagRecordUpdateAdapter = UpdateAdapter(
+            database,
+            'TagRecord',
+            ['id'],
+            (TagRecord item) => <String, Object?>{
+                  'id': item.id,
+                  'issueId': item.issueId,
+                  'title': item.title,
+                  'color': item.color
+                });
+
+  final sqflite.DatabaseExecutor database;
+
+  final StreamController<String> changeListener;
+
+  final QueryAdapter _queryAdapter;
+
+  final InsertionAdapter<TagRecord> _tagRecordInsertionAdapter;
+
+  final UpdateAdapter<TagRecord> _tagRecordUpdateAdapter;
+
+  @override
+  Future<List<TagRecord>> getAll() async {
+    return _queryAdapter.queryList('SELECT * FROM TagRecord',
+        mapper: (Map<String, Object?> row) => TagRecord(
+            row['id'] as int?,
+            row['issueId'] as int,
+            row['title'] as String,
+            row['color'] as int?));
+  }
+
+  @override
+  Future<List<TagRecord>> getAllByIssueId(int id) async {
+    return _queryAdapter.queryList('SELECT * FROM TagRecord WHERE issueId = ?1',
+        mapper: (Map<String, Object?> row) => TagRecord(
+            row['id'] as int?,
+            row['issueId'] as int,
+            row['title'] as String,
+            row['color'] as int?),
+        arguments: [id]);
+  }
+
+  @override
+  Future<void> removeById(int id) async {
+    await _queryAdapter
+        .queryNoReturn('DELETE FROM TagRecord WHERE id = ?1', arguments: [id]);
+  }
+
+  @override
+  Future<void> removeByIssueId(int id) async {
+    await _queryAdapter.queryNoReturn(
+        'DELETE FROM TagRecord WHERE issueId = ?1',
+        arguments: [id]);
+  }
+
+  @override
+  Future<int> insert(TagRecord record) {
+    return _tagRecordInsertionAdapter.insertAndReturnId(
+        record, OnConflictStrategy.replace);
+  }
+
+  @override
+  Future<void> update(TagRecord record) async {
+    await _tagRecordUpdateAdapter.update(record, OnConflictStrategy.abort);
   }
 }
