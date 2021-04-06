@@ -84,9 +84,9 @@ class CreateIssueWidgetState extends State<CreateIssueWidget> {
                     onPressed: issueSummaryController.text.isEmpty
                         ? null
                         : () {
-                            final issue =
-                                Issue(issueSummaryController.text, issueDescriptionController.text, issueTags);
-                            Navigator.pop(context, issue);
+                            final factory =
+                                IssueFactory(issueSummaryController.text, issueDescriptionController.text, issueTags);
+                            Navigator.pop(context, factory);
                           }),
               ),
             )

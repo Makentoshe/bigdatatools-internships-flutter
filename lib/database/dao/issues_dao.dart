@@ -12,4 +12,7 @@ abstract class IssuesDao {
 
   @Query('DELETE FROM IssueRecord WHERE id = :id')
   Future<void> remove(int id);
+
+  @Update()
+  Future<void> update(IssueRecord record);
 }

@@ -80,7 +80,7 @@ class _$FlutterDatabase extends FlutterDatabase {
       },
       onCreate: (database, version) async {
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `IssueRecord` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `summary` TEXT NOT NULL, `description` TEXT NOT NULL)');
+            'CREATE TABLE IF NOT EXISTS `IssueRecord` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `order` INTEGER NOT NULL, `summary` TEXT NOT NULL, `description` TEXT NOT NULL)');
 
         await callback?.onCreate?.call(database, version);
       },
@@ -102,6 +102,17 @@ class _$IssuesDao extends IssuesDao {
             'IssueRecord',
             (IssueRecord item) => <String, Object?>{
                   'id': item.id,
+                  'order': item.order,
+                  'summary': item.summary,
+                  'description': item.description
+                }),
+        _issueRecordUpdateAdapter = UpdateAdapter(
+            database,
+            'IssueRecord',
+            ['id'],
+            (IssueRecord item) => <String, Object?>{
+                  'id': item.id,
+                  'order': item.order,
                   'summary': item.summary,
                   'description': item.description
                 });
@@ -114,20 +125,21 @@ class _$IssuesDao extends IssuesDao {
 
   final InsertionAdapter<IssueRecord> _issueRecordInsertionAdapter;
 
+  final UpdateAdapter<IssueRecord> _issueRecordUpdateAdapter;
+
   @override
   Future<List<IssueRecord>> getAll() async {
     return _queryAdapter.queryList('SELECT * FROM IssueRecord',
         mapper: (Map<String, Object?> row) => IssueRecord(
-            row['summary'] as String, row['description'] as String,
-            id: row['id'] as int));
+            row['summary'] as String,
+            row['description'] as String,
+            row['id'] as int?,
+            row['order'] as int));
   }
 
   @override
-  Future<IssueRecord?> remove(int id) async {
-    return _queryAdapter.query('DELETE FROM IssueRecord WHERE id = ?1',
-        mapper: (Map<String, Object?> row) => IssueRecord(
-            row['summary'] as String, row['description'] as String,
-            id: row['id'] as int),
+  Future<void> remove(int id) async {
+    await _queryAdapter.queryNoReturn('DELETE FROM IssueRecord WHERE id = ?1',
         arguments: [id]);
   }
 
@@ -135,5 +147,10 @@ class _$IssuesDao extends IssuesDao {
   Future<int> insert(IssueRecord record) {
     return _issueRecordInsertionAdapter.insertAndReturnId(
         record, OnConflictStrategy.replace);
+  }
+
+  @override
+  Future<void> update(IssueRecord record) async {
+    await _issueRecordUpdateAdapter.update(record, OnConflictStrategy.abort);
   }
 }

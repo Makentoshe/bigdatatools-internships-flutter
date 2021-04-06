@@ -10,6 +10,7 @@ class IssuesViewModel extends ChangeNotifier {
   IssuesViewModel() {
     database.then((database) {
       database.issuesDao.getAll().then((issues) {
+        issues.sort((a, b) => a.order.compareTo(b.order));
         this.issues.addAll(issues.map((record) => record.toIssue()));
         notifyListeners();
       });
@@ -19,14 +20,13 @@ class IssuesViewModel extends ChangeNotifier {
   final Future<FlutterDatabase> database = $FloorFlutterDatabase.databaseBuilder('database.db').build();
   final List<Issue> issues = [];
 
-  void addIssue(Issue issue) {
-    final record = IssueRecord.fromIssue(issue);
-    database.then((database) => database.issuesDao.insert(record).then((id) => _internalAddIssue(issue.copy(id: id))));
-  }
-
-  void _internalAddIssue(Issue issue) {
-    issues.add(issue);
-    notifyListeners();
+  void addIssue(IssueFactory factory) {
+    final orderedIssueFactory = factory.order(issues.length);
+    final record = IssueRecord.fromOrderedIssueFactory(orderedIssueFactory);
+    database.then((database) => database.issuesDao.insert(record).then((id) {
+      issues.add(orderedIssueFactory.build(id));
+      notifyListeners();
+    }));
   }
 
   void removeIssue(Issue issue) {
@@ -39,11 +39,29 @@ class IssuesViewModel extends ChangeNotifier {
   }
 
   void reorderIssues(int oldPosition, int newPosition) {
-    if (oldPosition < newPosition) {
-      issues.insert(min(newPosition - 1, issues.length - 1), issues.removeAt(oldPosition));
-    } else {
-      issues.insert(min(newPosition, issues.length - 1), issues.removeAt(oldPosition));
-    }
+      if (oldPosition < newPosition) {
+        _internalReorderIssuesA(oldPosition, newPosition);
+      } else {
+        _internalReorderIssuesB(oldPosition, newPosition);
+      }
     notifyListeners();
+  }
+
+  void _internalReorderIssuesA(int oldPosition, int newPosition) {
+    database.then((database) {
+      issues.insert(min(newPosition - 1, issues.length - 1), issues.removeAt(oldPosition));
+      issues.sublist(oldPosition, newPosition).forEach((issue) {
+        database.issuesDao.update(IssueRecord.fromIssue(issue.copy(order: issues.indexOf(issue))));
+      });
+    });
+  }
+
+  void _internalReorderIssuesB(int oldPosition, int newPosition) {
+    database.then((database) {
+      issues.insert(min(newPosition, issues.length - 1), issues.removeAt(oldPosition));
+      issues.sublist(newPosition, oldPosition + 1).forEach((issue) {
+        database.issuesDao.update(IssueRecord.fromIssue(issue.copy(order: issues.indexOf(issue))));
+      });
+    });
   }
 }

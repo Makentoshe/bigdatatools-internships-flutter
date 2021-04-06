@@ -64,7 +64,7 @@ class IssuesWidgetState extends State<IssuesWidget> {
   navigateToCreateIssueWidget(BuildContext context) async {
     final route = MaterialPageRoute(builder: (context) => CreateIssueWidget());
     final result = await Navigator.push(context, route);
-    if (result is Issue) viewModel.addIssue(result);
+    if (result is IssueFactory) viewModel.addIssue(result);
   }
 
   showIssueActionsBottomDialog(Issue issue) {
